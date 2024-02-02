@@ -71,7 +71,7 @@ public class SheetViewController: UIViewController {
         }
     }
     
-    public static var minimumSpaceAbovePullBar: CGFloat = 0
+    public static var minimumSpaceAbovePullBar: CGFloat = 40
     public var minimumSpaceAbovePullBar: CGFloat {
         didSet {
             if self.isViewLoaded {
@@ -81,7 +81,7 @@ public class SheetViewController: UIViewController {
     }
     
     /// The default color of the overlay background
-    public static var overlayColor = UIColor(white: 0, alpha: 0.25)
+    public static var overlayColor = UIColor(white: 0, alpha: 0.5)
     /// The color of the overlay background
     public var overlayColor = SheetViewController.overlayColor {
         didSet {
@@ -105,7 +105,7 @@ public class SheetViewController: UIViewController {
         }
     }
     
-    public static var cornerRadius: CGFloat = 12
+    public static var cornerRadius: CGFloat = 8
     public var cornerRadius: CGFloat {
         get { return self.contentViewController.cornerRadius }
         set { self.contentViewController.cornerRadius = newValue }
