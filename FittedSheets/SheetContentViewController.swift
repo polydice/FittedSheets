@@ -268,40 +268,18 @@ public class SheetContentViewController: UIViewController {
     }
     
     private func setupPullBarView() {
-        // If they didn't specify pull bar options, they don't want a pull bar
-        guard self.options.pullBarHeight > 0 else { return }
-        let pullBarView = self.pullBarView
-        pullBarView.isUserInteractionEnabled = true
-        pullBarView.backgroundColor = self.pullBarBackgroundColor
-        self.contentWrapperView.addSubview(pullBarView)
-        Constraints(for: pullBarView) {
-            $0.top.pinToSuperview()
-            $0.left.pinToSuperview()
-            $0.right.pinToSuperview()
-            $0.height.set(options.pullBarHeight)
-        }
-        self.pullBarView = pullBarView
-        
-        let gripView = self.gripView
-        gripView.backgroundColor = self.gripColor
-        gripView.layer.cornerRadius = self.gripSize.height / 2
-        gripView.layer.masksToBounds = true
-        pullBarView.addSubview(gripView)
-        self.gripSizeConstraints.forEach({ $0.isActive = false })
+        // custom grip view style
+        let gripView = UIView()
+        gripView.isUserInteractionEnabled = false
+        gripView.backgroundColor = UIColor(white: 1.0, alpha: 0.6)
+        gripView.layer.cornerRadius = 4
+        contentView.addSubview(gripView)
         Constraints(for: gripView) {
-            $0.centerY.alignWithSuperview()
+            $0.top.pinToSuperview(inset: -16)
             $0.centerX.alignWithSuperview()
-            self.gripSizeConstraints = $0.size.set(self.gripSize)
+            $0.width.set(54)
+            $0.height.set(8)
         }
-        
-        pullBarView.isAccessibilityElement = true
-        pullBarView.accessibilityIdentifier = "pull-bar"
-        // This will be overriden whenever the sizes property is changed on SheetViewController
-        pullBarView.accessibilityLabel = Localize.dismissPresentation.localized
-        pullBarView.accessibilityTraits = [.button]
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(pullBarTapped))
-        pullBarView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc func pullBarTapped(_ gesture: UITapGestureRecognizer) {
