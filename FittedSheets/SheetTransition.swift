@@ -23,7 +23,7 @@ public class SheetTransition: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return self.options.transitionDuration
+        return presenting ? options.transitionDuration : options.transitionDuration * 0.6
     }
 
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -107,7 +107,7 @@ public class SheetTransition: NSObject, UIViewControllerAnimatedTransitioning {
         SheetTransition.currentPresenters.removeAll(where: { $0 == presenter })
         let topSafeArea = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.compatibleSafeAreaInsets.top ?? 0
         UIView.animate(
-            withDuration: self.options.transitionDuration,
+            withDuration: self.options.transitionDuration * 0.6,
             animations: {
                 if self.options.shrinkPresentingViewController {
                     presenter.view.layer.transform = CATransform3DMakeScale(1, 1, 1)
