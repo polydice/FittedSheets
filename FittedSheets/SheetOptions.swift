@@ -27,7 +27,7 @@ public struct SheetOptions {
 
     public var transitionAnimationOptions: UIView.AnimationOptions = [.curveEaseOut]
     public var transitionDampening: CGFloat = 0.7
-    public var transitionDuration: TimeInterval = 0.4
+    public var transitionDuration: TimeInterval = 0.6
     /// Transition velocity base value. Automatically adjusts based on the initial size of the sheet.
     public var transitionVelocity: CGFloat = 0.8
     public var transitionOverflowType: TransitionOverflowType = .automatic
@@ -37,7 +37,7 @@ public struct SheetOptions {
     
     /// Allow the sheet to become full screen if pulled all the way to the top and not larger than the maximum size specified in sizes. Defaults to false.
     public var useFullScreenMode = true
-    public var shrinkPresentingViewController = true
+    public var shrinkPresentingViewController = false
     /// Set true to be able to use the sheet view controller as a subview instead of a modal. Defaults to false.
     public var useInlineMode = false
     
