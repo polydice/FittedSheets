@@ -666,7 +666,7 @@ public class SheetViewController: UIViewController {
             self.overlayView.alpha = 1
         }
 
-        let animator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 0.87)
+        let animator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 0.8)
         animator.addAnimations {
             contentView.transform = .identity
         }
