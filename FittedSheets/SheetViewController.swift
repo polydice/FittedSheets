@@ -227,11 +227,17 @@ public class SheetViewController: UIViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
         self.updateOrderedSizes()
         self.contentViewController.updatePreferredHeight()
         self.resize(to: self.currentSize, animated: false)
     }
-    
+
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
@@ -641,7 +647,7 @@ public class SheetViewController: UIViewController {
         ])
         self.animateIn(size: size, duration: duration, completion: completion)
     }
-    
+
     public func animateIn(size: SheetSize? = nil, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
         guard self.options.useInlineMode else { return }
         guard self.view.superview != nil else {
@@ -655,40 +661,37 @@ public class SheetViewController: UIViewController {
         contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
         self.overlayView.alpha = 0
         self.updateOrderedSizes()
-        
-        UIView.animate(
-            withDuration: duration,
-            animations: {
-                contentView.transform = .identity
-                self.overlayView.alpha = 1
-            },
-            completion: { _ in
-                completion?()
-            }
-        )
+
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.4, delay: 0) {
+            self.overlayView.alpha = 1
+        }
+
+        let animator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 0.87)
+        animator.addAnimations {
+            contentView.transform = .identity
+        }
+        animator.addCompletion { _ in
+            completion?()
+        }
+        animator.startAnimation()
     }
     
     /// Animates the sheet out, but only if presenting using the inline mode
     public func animateOut(duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
         guard self.options.useInlineMode else { return }
         let contentView = self.contentViewController.view!
-        
-        UIView.animate(
-            withDuration: duration,
-            delay: 0,
-            usingSpringWithDamping: self.options.transitionDampening,
-            initialSpringVelocity: self.options.transitionVelocity,
-            options: self.options.transitionAnimationOptions,
-            animations: {
-                contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
-                self.overlayView.alpha = 0
-            },
-            completion: { _ in
-                self.view.removeFromSuperview()
-                self.removeFromParent()
-                completion?()
-            }
-        )
+
+        UIViewPropertyAnimator.runningPropertyAnimator(
+          withDuration: duration,
+          delay: 0,
+          options: self.options.transitionAnimationOptions) {
+            contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
+            self.overlayView.alpha = 0
+        } completion: { _ in
+            self.view.removeFromSuperview()
+            self.removeFromParent()
+            completion?()
+        }
     }
 }
 
